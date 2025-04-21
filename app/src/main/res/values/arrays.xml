@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="transaction_categories">
+        <item>Food</item>
+        <item>Transport</item>
+        <item>Entertainment</item>
+        <item>Bills</item>
+        <item>Shopping</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="currency_options">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>LKR</item>
+    </string-array>
+</resources>

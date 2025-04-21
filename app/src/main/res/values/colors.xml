@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Existing Colors -->
+    <color name="primary">#4CAF50</color>       <!-- Green, used for Add Transaction -->
+    <color name="secondary">#2196F3</color>     <!-- Blue, used for View Summary -->
+    <color name="accent">#FF9800</color>        <!-- Orange, used for Settings -->
+    <color name="background">#F5F5F5</color>    <!-- Light gray background -->
+    <color name="text_primary">#212121</color>   <!-- Dark gray for primary text -->
+    <color name="text_secondary">#757575</color>  <!-- Lighter gray for secondary text -->
+    <color name="card_background">#FFFFFF</color> <!-- White for card backgrounds -->
+    <color name="black">#000000</color>          <!-- Pure black -->
+
+    <!-- New Colors -->
+    <color name="white">#FFFFFF</color>          <!-- Pure white, used for backgrounds -->
+    <color name="darker_gray">#616161</color>     <!-- Darker gray, matching android:color/darker_gray -->
+    <color name="progress_tint">#2196F3</color>   <!-- Same as secondary, for ProgressBar tint -->
+</resources>

@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -20,6 +21,7 @@ class AddTransactionActivity : AppCompatActivity() {
     private lateinit var settingsPreferences: SharedPreferences
     private val gson = Gson()
     private var transactionId: String? = null
+    private val calendar: Calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +47,32 @@ class AddTransactionActivity : AppCompatActivity() {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
+        // Setup date picker
+        binding.tvDate.setOnClickListener {
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                this,
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    // Month is 0-based, so add 1 for display
+                    val selectedDate = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                    binding.tvDate.text = selectedDate
+                },
+                year, month, day
+            )
+            // Prevent selecting future dates
+            datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+            datePickerDialog.show()
+        }
+
         // Check if editing a transaction
         intent.getParcelableExtra<Transaction>("transaction")?.let { transaction ->
             transactionId = transaction.id
             binding.etTitle.setText(transaction.title)
             binding.etAmount.setText(transaction.amount.toString())
-            binding.etDate.setText(transaction.date)
+            binding.tvDate.text = transaction.date
             val categories = resources.getStringArray(R.array.transaction_categories)
             binding.spinnerCategory.setSelection(categories.indexOf(transaction.category))
             binding.btnSaveTransaction.text = "Update"
@@ -76,7 +98,7 @@ class AddTransactionActivity : AppCompatActivity() {
     private fun validateInputs(): Boolean {
         val title = binding.etTitle.text.toString()
         val amount = binding.etAmount.text.toString()
-        val date = binding.etDate.text.toString()
+        val date = binding.tvDate.text.toString()
 
         if (title.isEmpty()) {
             Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show()
@@ -87,7 +109,7 @@ class AddTransactionActivity : AppCompatActivity() {
             return false
         }
         if (date.isEmpty() || !isValidDate(date)) {
-            Toast.makeText(this, "Enter a valid date (YYYY-MM-DD) not in the future", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Select a valid date (YYYY-MM-DD) not in the future", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -107,11 +129,10 @@ class AddTransactionActivity : AppCompatActivity() {
     }
 
     private fun saveTransaction() {
-
         val title = binding.etTitle.text.toString()
         val amount = binding.etAmount.text.toString().toDouble()
         val category = binding.spinnerCategory.selectedItem.toString()
-        val date = binding.etDate.text.toString()
+        val date = binding.tvDate.text.toString()
 
         val transaction = Transaction(
             id = transactionId ?: UUID.randomUUID().toString(),
@@ -120,7 +141,6 @@ class AddTransactionActivity : AppCompatActivity() {
             category = category,
             date = date
         )
-
 
         // Load existing transactions
         val json = sharedPreferences.getString("transactions", null)

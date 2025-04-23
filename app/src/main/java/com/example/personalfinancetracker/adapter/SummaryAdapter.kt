@@ -10,12 +10,14 @@ import com.example.personalfinancetracker.model.CategorySummary
 
 class SummaryAdapter(
     private val summaries: List<CategorySummary>,
-    private val currency: String
+    private val currency: String,
+    private val totalExpenses: Double
 ) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHolder>() {
 
     class SummaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryTextView: TextView = itemView.findViewById(R.id.tv_category)
         val amountTextView: TextView = itemView.findViewById(R.id.tv_amount)
+        val percentageTextView: TextView = itemView.findViewById(R.id.tv_percentage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder {
@@ -28,6 +30,10 @@ class SummaryAdapter(
         val summary = summaries[position]
         holder.categoryTextView.text = summary.category
         holder.amountTextView.text = "${currency}${String.format("%.2f", summary.totalAmount)}"
+
+        // Calculate and display percentage
+        val percentage = if (totalExpenses > 0) (summary.totalAmount / totalExpenses * 100) else 0.0
+        holder.percentageTextView.text = String.format("%.1f%%", percentage)
     }
 
     override fun getItemCount(): Int = summaries.size

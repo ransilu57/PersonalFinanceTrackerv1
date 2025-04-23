@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.work.runtime.ktx)  // Updated to match catalog naming
     implementation(libs.recyclerview)
     implementation(libs.cardview)          // Updated to match catalog naming
+    implementation(libs.mpandroidchart)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)

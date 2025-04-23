@@ -23,7 +23,7 @@
     <EditText
         android:id="@+id/et_title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Transaction Title"
         android:inputType="text"
         android:background="@drawable/spinner_background"
@@ -39,7 +39,7 @@
     <EditText
         android:id="@+id/et_amount"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Amount"
         android:inputType="numberDecimal"
         android:background="@drawable/spinner_background"
@@ -52,12 +52,25 @@
         android:layout_marginTop="16dp"
         android:padding="12dp"/>
 
+    <!-- Transaction Type Spinner -->
+    <Spinner
+        android:id="@+id/spinner_type"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/spinner_background"
+        android:contentDescription="Select Transaction Type"
+        app:layout_constraintTop_toBottomOf="@id/et_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"/>
+
     <Spinner
         android:id="@+id/spinner_category"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@drawable/spinner_background"
-        app:layout_constraintTop_toBottomOf="@id/et_amount"
+        app:layout_constraintTop_toBottomOf="@id/spinner_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"

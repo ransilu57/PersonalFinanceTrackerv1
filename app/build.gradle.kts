@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.biometric)
     implementation(libs.core.ktx)          // Updated to match catalog naming
     implementation(libs.appcompat)
     implementation(libs.material)

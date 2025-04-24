@@ -38,6 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter Budget Amount"
+        android:textColor="@color/black"
         android:inputType="numberDecimal"
         android:background="@android:drawable/edit_text"
         app:layout_constraintTop_toBottomOf="@id/budget_label"
@@ -96,8 +97,8 @@
 
         <Switch
             android:id="@+id/switch_notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:contentDescription="Toggle to enable or disable notifications"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

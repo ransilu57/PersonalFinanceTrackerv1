@@ -24,8 +24,8 @@
         <item>EUR</item>
         <item>GBP</item>
         <item>JPY</item>
-        <item>INR</item>
+        <item>LKR</item>
         <item>AUD</item>
-        <item>CAD</item>
+        <item>INR</item>
     </string-array>
 </resources>

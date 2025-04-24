@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E88E5"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter PIN Code"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp"/>
+
+    <!-- PIN Input Indicators -->
+    <LinearLayout
+        android:id="@+id/pin_indicators"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp">
+
+        <View
+            android:id="@+id/pin_dot_1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/pin_dot"
+            android:layout_margin="8dp"/>
+
+        <View
+            android:id="@+id/pin_dot_2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/pin_dot"
+            android:layout_margin="8dp"/>
+
+        <View
+            android:id="@+id/pin_dot_3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/pin_dot"
+            android:layout_margin="8dp"/>
+
+        <View
+            android:id="@+id/pin_dot_4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/pin_dot"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+
+    <!-- Fingerprint Prompt -->
+    <LinearLayout
+        android:id="@+id/fingerprint_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/pin_indicators"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/iv_fingerprint"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_partial_secure"
+            app:tint="#FFB300" />
+
+        <TextView
+            android:id="@+id/tv_fingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap here for fingerprint activation"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Numpad -->
+    <GridLayout
+        android:id="@+id/numpad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="4"
+        android:columnCount="3"
+        android:alignmentMode="alignMargins"
+        app:layout_constraintTop_toBottomOf="@id/fingerprint_prompt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp">
+
+        <!-- Row 1 -->
+        <Button
+            android:id="@+id/btn_1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="1"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="2"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="3"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <!-- Row 2 -->
+        <Button
+            android:id="@+id/btn_4"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="4"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_5"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="5"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_6"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="6"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <!-- Row 3 -->
+        <Button
+            android:id="@+id/btn_7"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="7"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_8"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="8"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_9"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="9"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <!-- Row 4 -->
+        <Button
+            android:id="@+id/btn_0"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="1"
+            android:text="0"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="2"
+            android:text="⌫"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_margin="8dp"/>
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

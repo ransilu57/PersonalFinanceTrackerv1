@@ -9,9 +9,11 @@
     <color name="text_secondary">#757575</color>  <!-- Lighter gray for secondary text -->
     <color name="card_background">#FFFFFF</color> <!-- White for card backgrounds -->
     <color name="black">#000000</color>          <!-- Pure black -->
-
-    <!-- New Colors -->
     <color name="white">#FFFFFF</color>          <!-- Pure white, used for backgrounds -->
     <color name="darker_gray">#616161</color>     <!-- Darker gray, matching android:color/darker_gray -->
     <color name="progress_tint">#2196F3</color>   <!-- Same as secondary, for ProgressBar tint -->
+
+    <!-- New Colors for Transaction Types -->
+    <color name="expense_color">#FF6347</color>  <!-- Tomato red for expenses -->
+    <color name="income_color">#32CD32</color>   <!-- Lime green for incomes -->
 </resources>

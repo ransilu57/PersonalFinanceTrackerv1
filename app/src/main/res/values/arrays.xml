@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Transaction Types -->
+    <string-array name="transaction_types">
+        <item>Expense</item>
+        <item>Income</item>
+    </string-array>
+
+    <!-- Categories for Transactions -->
     <string-array name="transaction_categories">
         <item>Food</item>
         <item>Transport</item>
         <item>Entertainment</item>
         <item>Bills</item>
-        <item>Shopping</item>
+        <item>Salary</item>
+        <item>Freelance</item>
         <item>Other</item>
     </string-array>
 
+
+    <!-- Currency Options for Settings -->
     <string-array name="currency_options">
         <item>USD</item>
         <item>EUR</item>
         <item>GBP</item>
+        <item>JPY</item>
         <item>LKR</item>
+        <item>AUD</item>
+        <item>INR</item>
     </string-array>
 </resources>

@@ -38,6 +38,15 @@ class AddTransactionActivity : AppCompatActivity() {
         val currency = settingsPreferences.getString("currency", "USD") ?: "USD"
         binding.etAmount.hint = "Amount ($currency)"
 
+        // Setup transaction type spinner
+        binding.spinnerType.adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.transaction_types,
+            android.R.layout.simple_spinner_item
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
         // Setup category spinner
         binding.spinnerCategory.adapter = ArrayAdapter.createFromResource(
             this,
@@ -56,13 +65,11 @@ class AddTransactionActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this,
                 { _, selectedYear, selectedMonth, selectedDay ->
-                    // Month is 0-based, so add 1 for display
                     val selectedDate = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                     binding.tvDate.text = selectedDate
                 },
                 year, month, day
             )
-            // Prevent selecting future dates
             datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
             datePickerDialog.show()
         }
@@ -75,6 +82,10 @@ class AddTransactionActivity : AppCompatActivity() {
             binding.tvDate.text = transaction.date
             val categories = resources.getStringArray(R.array.transaction_categories)
             binding.spinnerCategory.setSelection(categories.indexOf(transaction.category))
+            val types = resources.getStringArray(R.array.transaction_types)
+            binding.spinnerType.setSelection(
+                if (transaction.type == "income") 1 else 0
+            )
             binding.btnSaveTransaction.text = "Update"
         }
 
@@ -133,13 +144,15 @@ class AddTransactionActivity : AppCompatActivity() {
         val amount = binding.etAmount.text.toString().toDouble()
         val category = binding.spinnerCategory.selectedItem.toString()
         val date = binding.tvDate.text.toString()
+        val type = if (binding.spinnerType.selectedItem.toString() == "Income") "income" else "expense"
 
         val transaction = Transaction(
             id = transactionId ?: UUID.randomUUID().toString(),
             title = title,
             amount = amount,
             category = category,
-            date = date
+            date = date,
+            type = type
         )
 
         // Load existing transactions

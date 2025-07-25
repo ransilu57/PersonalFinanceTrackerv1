@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.biometric)
     implementation(libs.core.ktx)          // Updated to match catalog naming
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.work.runtime.ktx)  // Updated to match catalog naming
     implementation(libs.recyclerview)
     implementation(libs.cardview)          // Updated to match catalog naming
+    implementation(libs.mpandroidchart)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)

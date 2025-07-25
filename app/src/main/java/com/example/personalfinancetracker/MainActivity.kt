@@ -7,12 +7,15 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.personalfinancetracker.adapter.TransactionAdapter
@@ -23,8 +26,8 @@ import com.google.gson.reflect.TypeToken
 import java.util.concurrent.TimeUnit
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.content.res.ColorStateList
+import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -34,20 +37,28 @@ class MainActivity : AppCompatActivity() {
     private val transactions = mutableListOf<Transaction>()
     private val gson = Gson()
     private val CHANNEL_ID = "budget_notifications"
+    private val DAILY_REMINDER_WORK_NAME = "daily_reminder_work"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Create notification channel
+        // Create notification channels
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            val budgetChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Budget Notifications",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
-            NotificationManagerCompat.from(this).createNotificationChannel(channel)
+            val reminderChannel = NotificationChannel(
+                "daily_reminders",
+                "Daily Reminders",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val notificationManager = NotificationManagerCompat.from(this)
+            notificationManager.createNotificationChannel(budgetChannel)
+            notificationManager.createNotificationChannel(reminderChannel)
         }
 
         sharedPreferences = getSharedPreferences("TransactionPrefs", MODE_PRIVATE)
@@ -57,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         requestNotificationPermission()
         scheduleDailyReminder()
 
-        // Update click listeners to use the new LinearLayout IDs
         binding.btnAddTransactionWrapper.setOnClickListener {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
@@ -170,18 +180,35 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val totalSpent = transactions.sumOf { it.amount }
-        Log.d("MainActivity", "Total spent: $totalSpent")
-        val percentage = ((totalSpent / budget) * 100).coerceAtMost(100.0).toInt()
+        // Calculate total expenses and incomes
+        val totalExpenses = transactions.filter { it.type == "expense" }.sumOf { it.amount }
+        val totalIncomes = transactions.filter { it.type == "income" }.sumOf { it.amount }
+        val netSpending = totalExpenses - totalIncomes
+        val percentage = if (netSpending >= 0) {
+            ((netSpending / budget) * 100).coerceAtMost(100.0).toInt()
+        } else {
+            0 // If net spending is negative (more income than expenses), show 0% used
+        }
+
+        Log.d("MainActivity", "Total expenses: $totalExpenses, Total incomes: $totalIncomes, Net spending: $netSpending")
+        binding.budgetProgress.progress = percentage
+        binding.budgetProgress.progressTintList = when {
+            percentage >= 80 -> ColorStateList.valueOf(Color.RED)
+            percentage >= 50 -> ColorStateList.valueOf(Color.YELLOW)
+            else -> ColorStateList.valueOf(Color.GREEN)
+        }
         val currency = settingsPreferences.getString("currency", "USD") ?: "USD"
 
-        binding.budgetProgressLabel.text = "Budget: ${currency}${String.format("%.2f", budget)} | Spent: ${currency}${String.format("%.2f", totalSpent)}"
+        binding.budgetProgressLabel.text = "Budget: ${currency}${String.format("%.2f", budget)} | Net: ${currency}${String.format("%.2f", netSpending)}"
         binding.budgetProgress.progress = percentage
 
-        if (percentage >= 100) {
-            showNotification("Budget Exceeded", "You have exceeded your budget of ${currency}${String.format("%.2f", budget)}!")
-        } else if (percentage >= 80) {
-            showNotification("Budget Warning", "You are approaching your budget limit!")
+        val notificationsEnabled = settingsPreferences.getBoolean("notifications_enabled", true)
+        if (notificationsEnabled) {
+            if (percentage >= 100) {
+                showNotification("Budget Exceeded", "You have exceeded your budget of ${currency}${String.format("%.2f", budget)}!")
+            } else if (percentage >= 80) {
+                showNotification("Budget Warning", "You are approaching your budget limit!")
+            }
         }
     }
 
@@ -216,14 +243,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun scheduleDailyReminder() {
-        val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(1, TimeUnit.DAYS)
-            .build()
-        WorkManager.getInstance(this).enqueue(workRequest)
+        val notificationsEnabled = settingsPreferences.getBoolean("notifications_enabled", true)
+        val workManager = WorkManager.getInstance(this)
+
+        if (notificationsEnabled) {
+            val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(1, TimeUnit.DAYS)
+                .build()
+            workManager.enqueueUniquePeriodicWork(
+                DAILY_REMINDER_WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest
+            )
+            Log.d("MainActivity", "Scheduled daily reminder")
+        } else {
+            workManager.cancelUniqueWork(DAILY_REMINDER_WORK_NAME)
+            Log.d("MainActivity", "Cancelled daily reminder due to notifications disabled")
+        }
     }
 
     override fun onResume() {
         super.onResume()
         Log.d("MainActivity", "onResume called")
         loadTransactions()
+        scheduleDailyReminder()
     }
 }

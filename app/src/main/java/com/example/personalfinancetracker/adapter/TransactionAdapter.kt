@@ -3,8 +3,10 @@ package com.example.personalfinancetracker.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.personalfinancetracker.R
 import com.example.personalfinancetracker.databinding.ItemTransactionBinding
 import com.example.personalfinancetracker.model.Transaction
 
@@ -21,9 +23,25 @@ class TransactionAdapter(
         fun bind(transaction: Transaction) {
             Log.d("TransactionAdapter", "Binding transaction at position $adapterPosition: $transaction")
             binding.tvTitle.text = transaction.title
-            binding.tvAmount.text = "${currency}${String.format("%.2f", transaction.amount)}"
+            // Display amount with sign based on type
+            val amountSign = if (transaction.type == "income") "+" else "-"
+            binding.tvAmount.text = "$amountSign$currency${String.format("%.2f", transaction.amount)}"
+            binding.tvAmount.setTextColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    if (transaction.type == "income") R.color.income_color else R.color.expense_color
+                )
+            )
             binding.tvCategory.text = transaction.category
             binding.tvDate.text = transaction.date
+            // Display transaction type
+            binding.tvType.text = if (transaction.type == "income") "Income" else "Expense"
+            binding.tvType.setTextColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    if (transaction.type == "income") R.color.income_color else R.color.expense_color
+                )
+            )
             binding.root.setOnClickListener { onItemClick(transaction) }
             binding.root.setOnLongClickListener {
                 onItemLongClick(transaction)
